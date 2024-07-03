@@ -1,33 +1,39 @@
 from tkinter import *
 from PIL import ImageTk, Image
 
-window = Tk()
-greeting = Label(text="hello world")
-greeting.pack()
-#canvas = Canvas(window, width=100, height=100)
-#canvas.pack()
-#img = PhotoImage(file="funny-cat.jpg")
-#canvas.create_image(img)
-image = Image.open("funny-cat.jpg")
-pixels = list(image.getdata())
-width, height = image.size
+def change_pixels_rgb_value(pixels, r= -1, g= -1, b = -1):
+    new_pixels = list() 
+    for pix in pixels:
+        # local values that are assigned to tuples
+        new_r = r
+        new_g = g
+        new_b = b
+        if r == -1:
+            new_r = pix[0]
+        if g == -1:
+            new_g = pix[1]
+        if b == -1:
+            new_b = pix[2]
+        new_pixels.append((new_r, new_g,new_b))
+    
+    return new_pixels
 
-# reading pixel values
-#for x in range (width):
-    #for y in range (height):
-        # -> print(pixels[x][2])
+def main():
+    window = Tk()
+    greeting = Label(text="hello world")
+    greeting.pack()
 
-#for [x,y] in range(pixels):
-    #print(x,y)
-#image = Image.frombytes(size=[width,height], data=pixels, mode=w)
-new_pixels = list()
-for pix in pixels:
-    new_pixels.append((pix[0], pix[1],255))
-    #print(pix)
+    image = Image.open("funny-cat.jpg")
+    pixels = list(image.getdata())
 
-#image = Image.new(mode=image.mode, size=image.size)
-image.putdata(data=new_pixels)
-image = ImageTk.PhotoImage(image)
-img_label = Label(window, image=image)
-img_label.pack()
-window.mainloop()
+    new_pixels = change_pixels_rgb_value(pixels, 255)
+
+
+    image.putdata(data=new_pixels)
+    image = ImageTk.PhotoImage(image)
+    img_label = Label(window, image=image)
+    img_label.pack()
+    window.mainloop()
+
+if __name__ == "__main__":
+    main()
