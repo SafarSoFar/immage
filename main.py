@@ -7,13 +7,18 @@ from PIL import ImageTk, Image
 window = Tk()
 
 img_label = Label(window)
-img_label.pack()
+img_label.grid(row=1, column=0, sticky=N)
+img_label.grid_anchor(anchor=CENTER)
+#img_label.pack(anchor=CENTER)
+
+
 
 img_path = "No image path"
 img = Image
 
 img_path_label = Label(window, text=img_path)
-img_path_label.pack()
+#img_label.pack()
+img_path_label.grid(row=0, column=1, padx=10)
 
 # simple boolean image path check 
 def is_image_path_set():
@@ -71,6 +76,28 @@ def change_image_pixels_rgb_value(r= -1, g= -1, b = -1):
     image = image.resize((500,320))
     return list(image.getdata())'''
 
+# invokes on slider value change
+# sets each pixel either 0 or 255 depending on pixel brightness(rgb average) againt threshold
+def binary_threshold_image(threshold):
+    if contruct_original_image() == False:
+        return
+    
+    global img
+    pixels = list(img.getdata())
+    new_pixels = list()
+    for pix in pixels:
+        r = pix[0]
+        g = pix[1]
+        b = pix[2]
+        average = (r+g+b)/3
+        #print(pix)
+        binary = 0
+        if average > threshold:
+            binary = 255
+        new_pixels.append((binary,binary,binary))
+    img.putdata(new_pixels)
+    update_image_label()
+
 # shows original img without pixels modification
 def show_original_image():
     if contruct_original_image() == False: # aborting on non-completed image contruction
@@ -96,12 +123,26 @@ red_filter_btn = Button(text="Red filter", command=lambda: change_image_pixels_r
 green_filter_btn = Button(text="Green filter", command=lambda: change_image_pixels_rgb_value(g=255))
 blue_filter_btn = Button(text="Blue filter", command=lambda: change_image_pixels_rgb_value(b=255))
 normal_filter_btn = Button(text="Original", command= show_original_image)
+binary_thresholding_slider = Scale(from_=0, to=255)
 
-image_path_btn.pack()
+def thresholding_slider_listener(Any):
+    slider_val = binary_thresholding_slider.get()
+    binary_threshold_image(slider_val)
+
+binary_thresholding_slider.configure(command=thresholding_slider_listener)
+
+
+image_path_btn.grid(row=0,column=0, padx=10)
+red_filter_btn.grid(row=2,column=0, padx=10)
+green_filter_btn.grid(row=2, column=1, padx=10)
+blue_filter_btn.grid(row=2, column=2, padx=10)
+normal_filter_btn.grid(row=2, column=3, padx=10)
+binary_thresholding_slider.grid(row=2,column=4)
+'''image_path_btn.pack(anchor=N)
 red_filter_btn.pack()
 green_filter_btn.pack()
 blue_filter_btn.pack()
-normal_filter_btn.pack()
+normal_filter_btn.pack()'''
 
 # To disallow window resize
 #window.resizable(width=False, height=False)
