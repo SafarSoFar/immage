@@ -113,13 +113,29 @@ class ImportedImage():
         self.img_label.image = imageTk
         self.root_window_widget.update_idletasks() 
 
+    # extracts Least Significant Bit hidden data from each pixel color LSB 
+    def extract_lsb_data(self):
+        self.construct_original_image()
+        pixels = list(self.img.getdata())
+        extracted_data = ""
+        binary_str = ""
+        for i in range(len(pixels)):
+            #               A trick to get LSB
+            binary_str += str(pixels[i][0] & 1)
+            binary_str += str(pixels[i][1] & 1)
+            binary_str += str(pixels[i][2] & 1)
+        for i in range(0, len(binary_str), 8):
+            binary_chr = binary_str[i:i+8]
+            num = int(binary_chr,2)
+            extracted_data += chr(num)
+        print(extracted_data)
     
 # --- Main --- 
 
 window = Tk()
 
 img_label = Label(window)
-img_label.grid(row=1, column=0, sticky=N)
+img_label.grid(row=1, column=0, sticky=N,)
 img_label.grid_anchor(anchor=CENTER)
 
 img_path = "No image path"
@@ -138,6 +154,7 @@ normal_filter_btn = Button(text="Original", command= imported_image.construct_sh
 binary_thresholding_slider = Scale(from_=0, to=255, variable=255)
 inversion_btn = Button(text="Color inversion", command=imported_image.inverse_image_color)
 gray_code_btn = Button(text="Gray code", command=imported_image.image_gray_code)
+lsb_btn = Button(text="Extract LSB text", command=imported_image.extract_lsb_data)
 
 def thresholding_slider_listener(Any):
     slider_val = binary_thresholding_slider.get()
@@ -158,6 +175,7 @@ red_filter_btn.grid(row=2,column=0, padx=10)
 green_filter_btn.grid(row=2, column=1, padx=10)
 blue_filter_btn.grid(row=2, column=2, padx=10)
 normal_filter_btn.grid(row=2, column=3, padx=10)
+lsb_btn.grid(row=4,column=0)
 
 binary_thresholding_slider.grid(row=2,column=4)
 bit_plane_slider.grid(row=3, column=4)
