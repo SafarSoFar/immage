@@ -1,7 +1,14 @@
 from tkinter import *
 from tkinter.filedialog import askopenfilename 
 from PIL import ImageTk, Image
-from array import array
+
+# helper class
+class Binary():
+
+    # position index counts from 0 and right side
+    def get_bit_val_at_position(num, pos):
+        return (num >> pos) & 1
+    
 
 
 class ImportedImage():
@@ -56,7 +63,7 @@ class ImportedImage():
             average = (r+g+b)/3
             # binary in this context is either zero pixel light (0) *black color* or full pixl light (255) *white color* 
             binary = 0
-            if average > threshold:
+            if average > 255-threshold:
                 binary = 255
             pixels[i]=(binary,binary,binary)
 
@@ -69,6 +76,32 @@ class ImportedImage():
         pixels = list(self.img.getdata())
         for i in range(len(pixels)):
             pixels[i] = (255-pixels[i][0], 255-pixels[i][1], 255-pixels[i][2])
+        self.img.putdata(pixels)
+        self.update_image_label()
+
+    def image_gray_code(self):
+        self.construct_original_image()
+        pixels = list(self.img.getdata())
+        for i in range(len(pixels)):
+            #average = (pixels[i][0]+pixels[i][1]+pixels[i][2])/3
+            #average = int(average)
+            #pixels[i] = (average ^ (average>>1), average ^ (average>>1), average ^ (average>>1))
+            pixels[i] = (pixels[i][0] ^ (pixels[i][0]>>1), pixels[i][1] ^ (pixels[i][1]>>1), pixels[i][2] ^ (pixels[i][2]>>1))
+        self.img.putdata(pixels)
+        self.update_image_label()
+
+
+    def image_bit_plane(self, bit_pos):
+
+        self.construct_original_image()
+        pixels = list(self.img.getdata())
+        for i in range(len(pixels)):
+            average = (pixels[i][0]+pixels[i][1]+pixels[i][2])/3
+            average = int(average)
+            # either 0 or 255
+            binary = Binary.get_bit_val_at_position(average, bit_pos) *255
+            pixels[i] = (binary,binary,binary)
+
         self.img.putdata(pixels)
         self.update_image_label()
 
@@ -96,14 +129,15 @@ img = Image
 #img_path_label.grid(row=0, column=1, padx=10)
 
 
-imported_image = ImportedImage(img_path="funny-cat.jpg", img_label=img_label, root_window_widget=window)
+imported_image = ImportedImage(img_path=askopenfilename(initialdir="/",title="Choose the image"), img_label=img_label, root_window_widget=window)
 
 red_filter_btn = Button(text="Red filter", command=lambda: imported_image.change_image_pixels_rgb_value(r=255))
 green_filter_btn = Button(text="Green filter", command=lambda: imported_image.change_image_pixels_rgb_value(g=255))
 blue_filter_btn = Button(text="Blue filter", command=lambda: imported_image.change_image_pixels_rgb_value(b=255))
 normal_filter_btn = Button(text="Original", command= imported_image.construct_show_original_image)
-binary_thresholding_slider = Scale(from_=0, to=255)
+binary_thresholding_slider = Scale(from_=0, to=255, variable=255)
 inversion_btn = Button(text="Color inversion", command=imported_image.inverse_image_color)
+gray_code_btn = Button(text="Gray code", command=imported_image.image_gray_code)
 
 def thresholding_slider_listener(Any):
     slider_val = binary_thresholding_slider.get()
@@ -111,14 +145,25 @@ def thresholding_slider_listener(Any):
 
 binary_thresholding_slider.configure(command=thresholding_slider_listener)
 
+bit_plane_slider = Scale(from_=0, to=7)
+
+def bit_plane_listener(Any):
+    slider_val = bit_plane_slider.get()
+    imported_image.image_bit_plane(slider_val)
+
+bit_plane_slider.configure(command=bit_plane_listener)
 
 #image_path_btn.grid(row=0,column=0, padx=10)
 red_filter_btn.grid(row=2,column=0, padx=10)
 green_filter_btn.grid(row=2, column=1, padx=10)
 blue_filter_btn.grid(row=2, column=2, padx=10)
 normal_filter_btn.grid(row=2, column=3, padx=10)
+
 binary_thresholding_slider.grid(row=2,column=4)
+bit_plane_slider.grid(row=3, column=4)
+
 inversion_btn.grid(row=3, column=0)
+gray_code_btn.grid(row=3, column=1)
 
 # To disallow window resize
 #window.resizable(width=False, height=False)
