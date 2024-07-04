@@ -1,9 +1,7 @@
 from tkinter import *
 from tkinter.filedialog import askopenfilename 
 from PIL import ImageTk, Image
-
-
-
+from array import array
 
 
 class ImportedImage():
@@ -13,9 +11,7 @@ class ImportedImage():
         self.root_window_widget = root_window_widget
         self.construct_show_original_image()
 
-    '''def construct_original_image(self):
-        self.img = Image.open(self.img_path)
-        self.img.resize((500,320))'''
+
     def construct_original_image(self):
         self.img = Image.open(self.img_path)
         self.img.resize((500,320))
@@ -29,21 +25,23 @@ class ImportedImage():
 
         self.construct_original_image()
         pixels = list(self.img.getdata())
-        new_pixels = list()
-        for pix in pixels:
+        for i in range(len(pixels)):
+
             # local values that are assigned to tuples
             new_r = r
             new_g = g
             new_b = b
+
             if r == -1:
-                new_r = pix[0]
+                new_r = pixels[i][0]
             if g == -1:
-                new_g = pix[1]
+                new_g = pixels[i][1]
             if b == -1:
-                new_b = pix[2]
-            new_pixels.append((new_r, new_g,new_b))
-        self.img.putdata(new_pixels)
+                new_b = pixels[i][2]
+            pixels[i] = (new_r,new_g, new_b)
+        self.img.putdata(pixels)
         self.update_image_label()
+
 
     # invokes on slider value change
     # sets each pixel either 0 or 255 depending on pixel brightness(rgb average) againt threshold
@@ -51,19 +49,27 @@ class ImportedImage():
        
         self.construct_original_image()
         pixels = list(self.img.getdata())
-        new_pixels = list()
-        for pix in pixels:
-            r = pix[0]
-            g = pix[1]
-            b = pix[2]
+        for i in range(len(pixels)):
+            r = pixels[i][0]
+            g = pixels[i][1]
+            b = pixels[i][2]
             average = (r+g+b)/3
-            #print(pix)
             # binary in this context is either zero pixel light (0) *black color* or full pixl light (255) *white color* 
             binary = 0
             if average > threshold:
                 binary = 255
-            new_pixels.append((binary,binary,binary))
-        self.img.putdata(new_pixels)
+            pixels[i]=(binary,binary,binary)
+
+        self.img.putdata(pixels)
+        self.update_image_label()
+    
+    # pixel color inversion using full alpha constant 255
+    def inverse_image_color(self):
+        self.construct_original_image()
+        pixels = list(self.img.getdata())
+        for i in range(len(pixels)):
+            pixels[i] = (255-pixels[i][0], 255-pixels[i][1], 255-pixels[i][2])
+        self.img.putdata(pixels)
         self.update_image_label()
 
     def update_image_label(self):
@@ -86,9 +92,8 @@ img_label.grid_anchor(anchor=CENTER)
 img_path = "No image path"
 img = Image
 
-img_path_label = Label(window, text=img_path)
-#img_label.pack()
-img_path_label.grid(row=0, column=1, padx=10)
+#img_path_label = Label(window, text=img_path)
+#img_path_label.grid(row=0, column=1, padx=10)
 
 
 imported_image = ImportedImage(img_path="funny-cat.jpg", img_label=img_label, root_window_widget=window)
@@ -98,6 +103,7 @@ green_filter_btn = Button(text="Green filter", command=lambda: imported_image.ch
 blue_filter_btn = Button(text="Blue filter", command=lambda: imported_image.change_image_pixels_rgb_value(b=255))
 normal_filter_btn = Button(text="Original", command= imported_image.construct_show_original_image)
 binary_thresholding_slider = Scale(from_=0, to=255)
+inversion_btn = Button(text="Color inversion", command=imported_image.inverse_image_color)
 
 def thresholding_slider_listener(Any):
     slider_val = binary_thresholding_slider.get()
@@ -112,6 +118,7 @@ green_filter_btn.grid(row=2, column=1, padx=10)
 blue_filter_btn.grid(row=2, column=2, padx=10)
 normal_filter_btn.grid(row=2, column=3, padx=10)
 binary_thresholding_slider.grid(row=2,column=4)
+inversion_btn.grid(row=3, column=0)
 
 # To disallow window resize
 #window.resizable(width=False, height=False)
