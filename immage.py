@@ -21,7 +21,8 @@ class ImportedImage():
 
     def construct_original_image(self):
         self.img = Image.open(self.img_path)
-        self.img.resize((500,320))
+        #self.img = self.img.resize((500,320))
+        
     
     def construct_show_original_image(self):
         self.construct_original_image()
@@ -61,7 +62,7 @@ class ImportedImage():
             g = pixels[i][1]
             b = pixels[i][2]
             average = (r+g+b)/3
-            # binary in this context is either zero pixel light (0) *black color* or full pixl light (255) *white color* 
+            # binary in this context is either zero pixel light (0) *black color* or full pixel light (255) *white color* 
             binary = 0
             if average > 255-threshold:
                 binary = 255
@@ -128,33 +129,49 @@ class ImportedImage():
             binary_chr = binary_str[i:i+8]
             num = int(binary_chr,2)
             extracted_data += chr(num)
-        print(extracted_data)
+        return extracted_data
     
 # --- Main --- 
 
 window = Tk()
+scrollbar = Scrollbar(window)
+scrollbar.grid(row=0,column=2)
+canvas = Canvas(window)
+canvas.configure(yscrollcommand=scrollbar.set)
+canvas.grid(row=0,column=0)
+img_label = Label(canvas)
+img_label.grid(row=1, column=0)
+#img_label.grid_anchor(anchor=CENTER)
 
-img_label = Label(window)
-img_label.grid(row=1, column=0, sticky=N,)
-img_label.grid_anchor(anchor=CENTER)
-
-img_path = "No image path"
-img = Image
 
 #img_path_label = Label(window, text=img_path)
 #img_path_label.grid(row=0, column=1, padx=10)
 
+imported_image = ImportedImage
+def import_image():
+    global imported_image
+    imported_image = ImportedImage(img_path=askopenfilename(initialdir="/",title="Choose the image"), img_label=img_label, root_window_widget=window)     
 
-imported_image = ImportedImage(img_path=askopenfilename(initialdir="/",title="Choose the image"), img_label=img_label, root_window_widget=window)
 
-red_filter_btn = Button(text="Red filter", command=lambda: imported_image.change_image_pixels_rgb_value(r=255))
-green_filter_btn = Button(text="Green filter", command=lambda: imported_image.change_image_pixels_rgb_value(g=255))
-blue_filter_btn = Button(text="Blue filter", command=lambda: imported_image.change_image_pixels_rgb_value(b=255))
-normal_filter_btn = Button(text="Original", command= imported_image.construct_show_original_image)
-binary_thresholding_slider = Scale(from_=0, to=255, variable=255)
-inversion_btn = Button(text="Color inversion", command=imported_image.inverse_image_color)
-gray_code_btn = Button(text="Gray code", command=imported_image.image_gray_code)
-lsb_btn = Button(text="Extract LSB text", command=imported_image.extract_lsb_data)
+change_image_btn = Button(canvas, text="Change image", command=lambda: import_image())
+red_filter_btn = Button(canvas,text="Red filter", command=lambda: imported_image.change_image_pixels_rgb_value(r=255))
+green_filter_btn = Button(canvas,text="Green filter", command=lambda: imported_image.change_image_pixels_rgb_value(g=255))
+blue_filter_btn = Button(canvas,text="Blue filter", command=lambda: imported_image.change_image_pixels_rgb_value(b=255))
+original_image_btn = Button(canvas,text="Original", command=lambda: imported_image.construct_show_original_image())
+
+binary_thresholding_slider = Scale(canvas,from_=0, to=255, variable=255)
+inversion_btn = Button(canvas,text="Color inversion", command=lambda: imported_image.inverse_image_color())
+gray_code_btn = Button(canvas,text="Gray code", command=lambda: imported_image.image_gray_code())
+
+txt = Text(canvas,height=10,width=40)
+def set_lsb_to_widget():
+    lsb_data = imported_image.extract_lsb_data()
+    txt.delete("1.0", END) # to clear txt
+    txt.insert("1.0",lsb_data)
+
+lsb_btn = Button(canvas,text="Extract LSB text", command=lambda: set_lsb_to_widget())
+txt.grid(row=5, column=1)
+
 
 def thresholding_slider_listener(Any):
     slider_val = binary_thresholding_slider.get()
@@ -170,11 +187,12 @@ def bit_plane_listener(Any):
 
 bit_plane_slider.configure(command=bit_plane_listener)
 
-#image_path_btn.grid(row=0,column=0, padx=10)
+change_image_btn.grid(row=4,column=3)
 red_filter_btn.grid(row=2,column=0, padx=10)
 green_filter_btn.grid(row=2, column=1, padx=10)
 blue_filter_btn.grid(row=2, column=2, padx=10)
-normal_filter_btn.grid(row=2, column=3, padx=10)
+original_image_btn.grid(row=2, column=3, padx=10)
+
 lsb_btn.grid(row=4,column=0)
 
 binary_thresholding_slider.grid(row=2,column=4)

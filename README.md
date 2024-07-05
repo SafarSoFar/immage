@@ -1,3 +1,6 @@
 # Immage
 
-Immage - an image analysis tool and image hidden data extractor. The personal goal for the project is to use it as a CTF tool
+Immage - an image analysis tool (steganography) and hidden data extractor.
+
+The tool applies different steganography algorithms (pixel color manipulations and bit manipulations) 
+on the imported image in order to find hidden artifacts.
