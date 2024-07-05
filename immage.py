@@ -107,7 +107,9 @@ class ImportedImage():
         self.update_image_label()
 
     def update_image_label(self):
-        imageTk = ImageTk.PhotoImage(self.img)
+        resized_img = self.img
+        resized_img = resized_img.resize((500,320))
+        imageTk = ImageTk.PhotoImage(resized_img)
         
         #WITHOUT THESE NEXT THREE LINES NOTHING WILL BE UPDATED
         self.img_label.configure(image= imageTk)
