@@ -4,8 +4,8 @@
 
 
 from pathlib import Path
-
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from string import printable
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Scale
 from tkinter.filedialog import askopenfilename
 
 from immage_logic import ImageProcessing
@@ -127,11 +127,30 @@ gray_code_btn.place(
 
 lsb_data_btn_img = PhotoImage(
     file=relative_to_assets("button_5.png"))
+
+def lsb_data_btn_listener():
+    canvas.delete("lsb_data")
+    lsb_data = image_to_process.extract_lsb_data()
+    #lsb_data = bytes(lsb_data, 'utf-8').decode('ascii', 'ignore')
+    
+    # to write to .txt file wthout invisible symbols
+    printable_lsb_data = ''.join(char for char in lsb_data if char in printable) # 
+    with open("lsb.txt", "w") as f:
+        f.write(printable_lsb_data)
+
+    canvas.create_text(
+        200.0,
+        474.0,
+        fill="#D9D9D9",
+        width=300,
+        text="LSB data extracted to lsb.txt file", tag="lsb_data")
+    
+
 lsb_data_btn = Button(
     image=lsb_data_btn_img,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_5 clicked"),
+    command=lambda: lsb_data_btn_listener(),
     relief="flat"
 )
 lsb_data_btn.place(
@@ -156,6 +175,19 @@ change_image_btn.place(
     width=158.0,
     height=36.0
 )
+binary_threshold_slider = Scale(from_=0, to=255,bg="black", highlightthickness=0, orient="horizontal")
+binary_threshold_slider.place(x=500,y=500)
+def binary_threshold_slider_listener(Any):
+    slider_val = binary_threshold_slider.get()
+    image_to_process.binary_threshold_image(slider_val)
+binary_threshold_slider.configure(command=binary_threshold_slider_listener)
+
+bit_plane_slider = Scale(from_=0, to=7, bg="black",highlightthickness=0, orient='horizontal')
+bit_plane_slider.place(x=500,y=550)
+def bit_plane_slider_listener(Any):
+    slider_val = bit_plane_slider.get()
+    image_to_process.image_bit_plane(slider_val)
+bit_plane_slider.configure(command=bit_plane_slider_listener)
 
 show_original_image_btn_img = PhotoImage(
     file=relative_to_assets("button_7.png"))
@@ -174,12 +206,5 @@ show_original_image_btn.place(
 )
 
 
-canvas.create_text(
-    200.0,
-    474.0,
-    fill="#D9D9D9",
-    justify="center",
-    width=300,
-    text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi bibendum efficitur ipsum vel blandit. Donec volutpat nisi nec tellus facilisis sollicitudin. Nunc eget feugiat nisl. Duis sagittis odio non hendrerit gravida. Suspendisse maximus at ante eget rhoncus. Donec ultricies nunc ut efficitur ullamcorper. Aliquam sit amet tortor lacus. Donec rutrum elit vitae porttitor facilisis. Vivamus non nibh in elit finibus pellentesque pharetra sed velit. Curabitur efficitur felis dui, ut fringilla felis eleifend eget. Pellentesque posuere, magna interdum consequat tristique, lorem tellus fringilla ipsum, sed consectetur sem purus sollicitudin sapien. Maecenas facilisis et dui at convallis. hello")
 window.resizable(False, False)
 window.mainloop()

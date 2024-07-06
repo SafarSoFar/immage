@@ -110,7 +110,8 @@ class ImageProcessing():
         resized_img = resized_img.resize((500,320))
         imageTk = ImageTk.PhotoImage(resized_img)
         self.imageTk = imageTk # to prevent garbage collection
-        self.img_canvas = self.image_canvas.create_image(336,246, image=self.imageTk)
+        self.image_canvas.delete("imported_image") # to prevent stack of images
+        self.image_canvas.create_image(336,246, image=self.imageTk, tag="imported_image")
 
         #WITHOUT THESE NEXT TWO LINES NOTHING WILL BE UPDATED
         #self.img_canvas.image = imageTk
