@@ -11,7 +11,7 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"build\assets\frame0")
+ASSETS_PATH = OUTPUT_PATH / Path(r"\build\assets\frame0")
 
 
 def relative_to_assets(path: str) -> Path:
@@ -35,12 +35,12 @@ canvas = Canvas(
 )
 
 canvas.place(x = 0, y = 0)
-image_image_1 = PhotoImage(
+imported_image = PhotoImage(
     file=relative_to_assets("image_1.png"))
-image_1 = canvas.create_image(
+image_canvas = canvas.create_image(
     336.0,
     246.0,
-    image=image_image_1
+    image=imported_image
 )
 
 canvas.create_text(
@@ -52,112 +52,112 @@ canvas.create_text(
     font=("Inter", 24 * -1)
 )
 
-button_image_1 = PhotoImage(
+red_filter_btn_img = PhotoImage(
     file=relative_to_assets("button_1.png"))
-button_1 = Button(
-    image=button_image_1,
+red_filter_btn = Button(
+    image=red_filter_btn_img,
     borderwidth=0,
     highlightthickness=0,
     command=lambda: print("button_1 clicked"),
     relief="flat"
 )
-button_1.place(
+red_filter_btn.place(
     x=770.0,
     y=37.0,
     width=197.0,
     height=53.0
 )
 
-button_image_2 = PhotoImage(
+green_filter_btn_img = PhotoImage(
     file=relative_to_assets("button_2.png"))
-button_2 = Button(
-    image=button_image_2,
+green_filter_btn = Button(
+    image=green_filter_btn_img,
     borderwidth=0,
     highlightthickness=0,
     command=lambda: print("button_2 clicked"),
     relief="flat"
 )
-button_2.place(
+green_filter_btn.place(
     x=770.0,
     y=129.0,
     width=197.0,
     height=53.0
 )
 
-button_image_3 = PhotoImage(
+blue_filter_btn_img = PhotoImage(
     file=relative_to_assets("button_3.png"))
-button_3 = Button(
-    image=button_image_3,
+blue_filter_btn = Button(
+    image=blue_filter_btn_img,
     borderwidth=0,
     highlightthickness=0,
     command=lambda: print("button_3 clicked"),
     relief="flat"
 )
-button_3.place(
+blue_filter_btn.place(
     x=770.0,
     y=221.0,
     width=197.0,
     height=53.0
 )
 
-button_image_4 = PhotoImage(
+gray_code_btn_img = PhotoImage(
     file=relative_to_assets("button_4.png"))
-button_4 = Button(
-    image=button_image_4,
+gray_code_btn = Button(
+    image=gray_code_btn_img,
     borderwidth=0,
     highlightthickness=0,
     command=lambda: print("button_4 clicked"),
     relief="flat"
 )
-button_4.place(
+gray_code_btn.place(
     x=770.0,
     y=313.0,
     width=197.0,
     height=53.0
 )
 
-button_image_5 = PhotoImage(
+lsb_data_btn_img = PhotoImage(
     file=relative_to_assets("button_5.png"))
-button_5 = Button(
-    image=button_image_5,
+lsb_data_btn = Button(
+    image=lsb_data_btn_img,
     borderwidth=0,
     highlightthickness=0,
     command=lambda: print("button_5 clicked"),
     relief="flat"
 )
-button_5.place(
+lsb_data_btn.place(
     x=86.0,
     y=613.0,
     width=274.0,
     height=35.66033935546875
 )
 
-button_image_6 = PhotoImage(
+change_image_btn_img = PhotoImage(
     file=relative_to_assets("button_6.png"))
-button_6 = Button(
-    image=button_image_6,
+change_image_btn = Button(
+    image=change_image_btn_img,
     borderwidth=0,
     highlightthickness=0,
     command=lambda: print("button_6 clicked"),
     relief="flat"
 )
-button_6.place(
+change_image_btn.place(
     x=86.0,
     y=37.0,
     width=158.0,
     height=36.0
 )
 
-button_image_7 = PhotoImage(
+show_original_image_btn_img = PhotoImage(
     file=relative_to_assets("button_7.png"))
-button_7 = Button(
-    image=button_image_7,
+show_original_image_btn = Button(
+    image=show_original_image_btn_img,
     borderwidth=0,
     highlightthickness=0,
     command=lambda: print("button_7 clicked"),
     relief="flat"
 )
-button_7.place(
+show_original_image_btn.place(
     x=428.0,
     y=37.0,
     width=158.0,
