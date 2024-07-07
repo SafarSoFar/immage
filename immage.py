@@ -177,17 +177,18 @@ change_image_btn.place(
 )
 binary_threshold_slider = Scale(from_=0, to=255,bg="black",fg="white", length=200,label="Binary treshold",highlightthickness=0, orient="horizontal", highlightcolor='white')
 binary_threshold_slider.place(x=765,y=450)
-def binary_threshold_slider_listener(Any):
+def binary_threshold_slider_listener(event):
     slider_val = binary_threshold_slider.get()
     image_to_process.binary_threshold_image(slider_val)
-binary_threshold_slider.configure(command=binary_threshold_slider_listener)
+binary_threshold_slider.bind("<ButtonRelease-1>", binary_threshold_slider_listener)
+#binary_threshold_slider.configure(command=binary_threshold_slider_listener)
 
 bit_plane_slider = Scale(from_=0, to=7, bg="black", fg="white",label="Bit plane",length=200,highlightthickness=0, orient='horizontal')
 bit_plane_slider.place(x=765,y=550)
-def bit_plane_slider_listener(Any):
+def bit_plane_slider_listener(event):
     slider_val = bit_plane_slider.get()
     image_to_process.image_bit_plane(slider_val)
-bit_plane_slider.configure(command=bit_plane_slider_listener)
+bit_plane_slider.bind("<ButtonRelease-1>", bit_plane_slider_listener) 
 
 show_original_image_btn_img = PhotoImage(
     file=relative_to_assets("button_7.png"))

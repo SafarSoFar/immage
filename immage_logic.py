@@ -15,6 +15,7 @@ class ImageProcessing():
     def __init__(self, img_path, canvas,root_window_widget):
         self.img_path = img_path
         self.image_canvas = canvas
+        self.is_image_widget_created = False
         self.root_window_widget = root_window_widget
         self.construct_show_original_image()
 
@@ -110,8 +111,12 @@ class ImageProcessing():
         resized_img = resized_img.resize((500,320))
         imageTk = ImageTk.PhotoImage(resized_img)
         self.imageTk = imageTk # to prevent garbage collection
-        self.image_canvas.delete("imported_image") # to prevent stack of images
-        self.image_canvas.create_image(336,246, image=self.imageTk, tag="imported_image")
+        #self.image_canvas.delete("imported_image") # to prevent stack of images
+        if self.is_image_widget_created == True:
+            self.image_canvas.itemconfig('imported_image', image=self.imageTk)
+        else:
+            self.image_canvas.create_image(336,246, image=self.imageTk, tag="imported_image")
+            self.is_image_widget_created = True
 
         #WITHOUT THESE NEXT TWO LINES NOTHING WILL BE UPDATED
         #self.img_canvas.image = imageTk
@@ -134,78 +139,4 @@ class ImageProcessing():
             extracted_data += chr(num)
         return extracted_data
     
-# --- Main --- 
 
-'''window = Tk()
-scrollbar = Scrollbar(window)
-scrollbar.grid(row=0,column=2)
-canvas = Canvas(window)
-canvas.configure(yscrollcommand=scrollbar.set)
-canvas.grid(row=0,column=0)
-img_label = Label(canvas)
-img_label.grid(row=1, column=0)
-
-imported_image = ImageProcessing
-def import_image():
-    global imported_image
-    imported_image = ImageProcessing(img_path=askopenfilename(initialdir="/",title="Choose the image"), img_label=img_label, root_window_widget=window)     
-
-
-change_image_btn = Button(canvas, text="Change image", command=lambda: import_image())
-red_filter_btn = Button(canvas,text="Red filter", command=lambda: imported_image.change_image_pixels_rgb_value(r=255))
-green_filter_btn = Button(canvas,text="Green filter", command=lambda: imported_image.change_image_pixels_rgb_value(g=255))
-blue_filter_btn = Button(canvas,text="Blue filter", command=lambda: imported_image.change_image_pixels_rgb_value(b=255))
-original_image_btn = Button(canvas,text="Original", command=lambda: imported_image.construct_show_original_image())
-
-binary_thresholding_slider = Scale(canvas,from_=0, to=255, variable=255)
-inversion_btn = Button(canvas,text="Color inversion", command=lambda: imported_image.inverse_image_color())
-gray_code_btn = Button(canvas,text="Gray code", command=lambda: imported_image.image_gray_code())
-
-txt = Text(canvas,height=10,width=40)
-def set_lsb_to_widget():
-    lsb_data = imported_image.extract_lsb_data()
-    txt.delete("1.0", END) # to clear txt
-    txt.insert("1.0",lsb_data)
-
-lsb_btn = Button(canvas,text="Extract LSB text", command=lambda: set_lsb_to_widget())
-txt.grid(row=5, column=1)
-
-
-def thresholding_slider_listener(Any):
-    slider_val = binary_thresholding_slider.get()
-    imported_image.binary_threshold_image(slider_val)
-
-binary_thresholding_slider.configure(command=thresholding_slider_listener)
-
-bit_plane_slider = Scale(from_=0, to=7)
-
-def bit_plane_listener(Any):
-    slider_val = bit_plane_slider.get()
-    imported_image.image_bit_plane(slider_val)
-
-bit_plane_slider.configure(command=bit_plane_listener)
-
-change_image_btn.grid(row=4,column=3)
-red_filter_btn.grid(row=2,column=0, padx=10)
-green_filter_btn.grid(row=2, column=1, padx=10)
-blue_filter_btn.grid(row=2, column=2, padx=10)
-original_image_btn.grid(row=2, column=3, padx=10)
-
-lsb_btn.grid(row=4,column=0)
-
-binary_thresholding_slider.grid(row=2,column=4)
-bit_plane_slider.grid(row=3, column=4)
-
-inversion_btn.grid(row=3, column=0)
-gray_code_btn.grid(row=3, column=1)
-
-# To disallow window resize
-#window.resizable(width=False, height=False)
-window.mainloop()
-
-
-#def main():
-
-
-#if __name__ == "__main__":
-    #main()'''
