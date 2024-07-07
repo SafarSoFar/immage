@@ -175,15 +175,15 @@ change_image_btn.place(
     width=158.0,
     height=36.0
 )
-binary_threshold_slider = Scale(from_=0, to=255,bg="black", highlightthickness=0, orient="horizontal")
-binary_threshold_slider.place(x=500,y=500)
+binary_threshold_slider = Scale(from_=0, to=255,bg="black",fg="white", length=200,label="Binary treshold",highlightthickness=0, orient="horizontal", highlightcolor='white')
+binary_threshold_slider.place(x=765,y=450)
 def binary_threshold_slider_listener(Any):
     slider_val = binary_threshold_slider.get()
     image_to_process.binary_threshold_image(slider_val)
 binary_threshold_slider.configure(command=binary_threshold_slider_listener)
 
-bit_plane_slider = Scale(from_=0, to=7, bg="black",highlightthickness=0, orient='horizontal')
-bit_plane_slider.place(x=500,y=550)
+bit_plane_slider = Scale(from_=0, to=7, bg="black", fg="white",label="Bit plane",length=200,highlightthickness=0, orient='horizontal')
+bit_plane_slider.place(x=765,y=550)
 def bit_plane_slider_listener(Any):
     slider_val = bit_plane_slider.get()
     image_to_process.image_bit_plane(slider_val)
