@@ -6,3 +6,7 @@ Written in Python.
 GUI - Tkinter.
 GUI Design - Figma, Tkdesigner.
 
+
+Linux v0.1 build : Python 3.9.19, 
+pyinstaller execution config: pyinstaller --onefile --name immage --hidden-import='PIL._tkinter_finder' --add-data "assets/*.png:assets/" immage_app.py
+
