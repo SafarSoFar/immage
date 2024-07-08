@@ -1,6 +1,8 @@
 # Immage
 
-Immage - an image analysis tool (steganography) and hidden data extractor.
+Immage - an image analysis tool (steganography) and hidden data extractor. The tool applies different steganography algorithms (pixel color manipulations and bit manipulations) on the imported image in order to find hidden artifacts.
 
-The tool applies different steganography algorithms (pixel color manipulations and bit manipulations) 
-on the imported image in order to find hidden artifacts.
+Written in Python. 
+GUI - Tkinter.
+GUI Design - Figma, Tkdesigner.
+

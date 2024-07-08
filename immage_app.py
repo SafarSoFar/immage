@@ -3,7 +3,8 @@
 # https://github.com/ParthJadhav/Tkinter-Designer
 
 
-from pathlib import Path
+import os
+import sys
 from string import printable
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Scale
 from tkinter.filedialog import askopenfilename
@@ -11,12 +12,12 @@ from tkinter.filedialog import askopenfilename
 from immage_logic import ImageProcessing
 
 
-#OUTPUT_PATH = Path(__file__).parent
-#ASSETS_PATH = OUTPUT_PATH / Path(r"")
 
+# absolute path to resourse, required for pyintaller executable assets identification
+def resource_path(relative_path):
+    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base_path,relative_path)
 
-#def relative_to_assets(path: str) -> Path:
-    #return ASSETS_PATH / Path(path)
 
 
 window = Tk()
@@ -62,7 +63,7 @@ image_canvas = canvas.create_image(
 )'''
 
 red_filter_btn_img = PhotoImage(
-    file="assets/button_1.png")
+    file=resource_path("assets/button_1.png"))
 red_filter_btn = Button(
     image=red_filter_btn_img,
     borderwidth=0,
@@ -78,7 +79,7 @@ red_filter_btn.place(
 )
 
 green_filter_btn_img = PhotoImage(
-    file="assets/button_2.png")
+    file=resource_path("assets/button_2.png"))
 green_filter_btn = Button(
     image=green_filter_btn_img,
     borderwidth=0,
@@ -94,7 +95,7 @@ green_filter_btn.place(
 )
 
 blue_filter_btn_img = PhotoImage(
-    file="assets/button_3.png")
+    file=resource_path("assets/button_3.png"))
 blue_filter_btn = Button(
     image=blue_filter_btn_img,
     borderwidth=0,
@@ -110,7 +111,7 @@ blue_filter_btn.place(
 )
 
 gray_code_btn_img = PhotoImage(
-    file="assets/button_4.png")
+    file=resource_path("assets/button_4.png"))
 gray_code_btn = Button(
     image=gray_code_btn_img,
     borderwidth=0,
@@ -126,7 +127,7 @@ gray_code_btn.place(
 )
 
 lsb_data_btn_img = PhotoImage(
-    file="assets/button_5.png")
+    file=resource_path("assets/button_5.png"))
 
 def lsb_data_btn_listener():
     canvas.delete("lsb_data")
@@ -161,7 +162,7 @@ lsb_data_btn.place(
 )
 
 change_image_btn_img = PhotoImage(
-    file="assets/button_6.png")
+    file=resource_path("assets/button_6.png"))
 change_image_btn = Button(
     image=change_image_btn_img,
     borderwidth=0,
@@ -191,7 +192,7 @@ def bit_plane_slider_listener(event):
 bit_plane_slider.bind("<ButtonRelease-1>", bit_plane_slider_listener) 
 
 show_original_image_btn_img = PhotoImage(
-    file="assets/button_7.png")
+    file=resource_path("assets/button_7.png"))
 show_original_image_btn = Button(
     image=show_original_image_btn_img,
     borderwidth=0,

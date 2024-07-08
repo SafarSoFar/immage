@@ -10,7 +10,6 @@ class Binary():
         return (num >> pos) & 1
     
 
-
 class ImageProcessing():
     def __init__(self, img_path, canvas,root_window_widget):
         self.img_path = img_path
