@@ -42,25 +42,9 @@ image_to_process = ImageProcessing
 def import_image():
     global image_to_process
     image_to_process = ImageProcessing(img_path=askopenfilename(initialdir="/",title="Choose the image"), canvas=canvas, root_window_widget=window)
-    #image_to_process.update_image_label()
 
 canvas.place(x = 0, y = 0)
-'''imported_image = PhotoImage(
-    file="")
-image_canvas = canvas.create_image(
-    336.0,
-    246.0,
-    image=imported_image
-)'''
 
-'''canvas.create_text(
-    86.0,
-    445.0,
-    anchor="nw",
-    text="LSB data",
-    fill="#FFFFFF",
-    font=("Inter", 24 * -1)
-)'''
 
 red_filter_btn_img = PhotoImage(
     file=resource_path("assets/button_1.png"))
@@ -116,7 +100,7 @@ gray_code_btn = Button(
     image=gray_code_btn_img,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: image_to_process.image_gray_code(),#print("button_4 clicked"),
+    command=lambda: image_to_process.image_gray_code(),
     relief="flat"
 )
 gray_code_btn.place(
@@ -132,7 +116,6 @@ lsb_data_btn_img = PhotoImage(
 def lsb_data_btn_listener():
     canvas.delete("lsb_data")
     lsb_data = image_to_process.extract_lsb_data()
-    #lsb_data = bytes(lsb_data, 'utf-8').decode('ascii', 'ignore')
     
     # to write to .txt file wthout invisible symbols
     printable_lsb_data = ''.join(char for char in lsb_data if char in printable) # 
@@ -182,7 +165,6 @@ def binary_threshold_slider_listener(event):
     slider_val = binary_threshold_slider.get()
     image_to_process.binary_threshold_image(slider_val)
 binary_threshold_slider.bind("<ButtonRelease-1>", binary_threshold_slider_listener)
-#binary_threshold_slider.configure(command=binary_threshold_slider_listener)
 
 bit_plane_slider = Scale(from_=0, to=7, bg="black", fg="white",label="Bit plane",length=200,highlightthickness=0, orient='horizontal')
 bit_plane_slider.place(x=765,y=550)

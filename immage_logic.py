@@ -21,7 +21,6 @@ class ImageProcessing():
 
     def construct_original_image(self):
         self.img = Image.open(self.img_path)
-        #self.img = self.img.resize((500,320))
         
     
     def construct_show_original_image(self):
@@ -83,9 +82,7 @@ class ImageProcessing():
         self.construct_original_image()
         pixels = list(self.img.getdata())
         for i in range(len(pixels)):
-            #average = (pixels[i][0]+pixels[i][1]+pixels[i][2])/3
-            #average = int(average)
-            #pixels[i] = (average ^ (average>>1), average ^ (average>>1), average ^ (average>>1))
+            # not entirely sure in this approach
             pixels[i] = (pixels[i][0] ^ (pixels[i][0]>>1), pixels[i][1] ^ (pixels[i][1]>>1), pixels[i][2] ^ (pixels[i][2]>>1))
         self.img.putdata(pixels)
         self.update_image_label()
@@ -110,16 +107,12 @@ class ImageProcessing():
         resized_img = resized_img.resize((500,320))
         imageTk = ImageTk.PhotoImage(resized_img)
         self.imageTk = imageTk # to prevent garbage collection
-        #self.image_canvas.delete("imported_image") # to prevent stack of images
         if self.is_image_widget_created == True:
             self.image_canvas.itemconfig('imported_image', image=self.imageTk)
         else:
             self.image_canvas.create_image(336,246, image=self.imageTk, tag="imported_image")
             self.is_image_widget_created = True
 
-        #WITHOUT THESE NEXT TWO LINES NOTHING WILL BE UPDATED
-        #self.img_canvas.image = imageTk
-        #self.root_window_widget.update_idletasks() 
 
     # extracts Least Significant Bit hidden data from each pixel color LSB 
     def extract_lsb_data(self):
@@ -128,7 +121,7 @@ class ImageProcessing():
         extracted_data = ""
         binary_str = ""
         for i in range(len(pixels)):
-            #               A trick to get LSB
+            #                     aquiring LSB
             binary_str += str(pixels[i][0] & 1)
             binary_str += str(pixels[i][1] & 1)
             binary_str += str(pixels[i][2] & 1)
