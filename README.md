@@ -1,6 +1,6 @@
 # Immage
 
-Immage (i'm mage :crystal_ball:)  - an image analysis tool (steganography) and hidden data extractor. The tool applies different steganography algorithms (pixel color manipulations and bit manipulations) on the imported image in order to find hidden artifacts.
+Immage (i'm mage :crystal_ball:)  - a cross-platform GUI image analysis tool (steganography tool) and hidden data extractor. The tool applies different steganography algorithms (pixel color manipulations and bit manipulations) on the imported image in order to find hidden artifacts.
 
 Written in :snake: Python. 
 GUI - Tkinter.
